@@ -6,7 +6,7 @@ import com.poc.ruben.domain.model.Asset;
 import com.poc.ruben.mapper.AssetMapper;
 import com.poc.ruben.repository.AssetRepository;
 import org.springframework.stereotype.Repository;
-
+import java.util.Optional;
 @Repository
 public class AssetRepositoryMongoImpl implements AssetRepository {
 
@@ -28,4 +28,9 @@ public class AssetRepositoryMongoImpl implements AssetRepository {
     public SearchResult searchImages(SearchQuery query) {
         return searchRepo.searchImages(query);
     }
+
+@Override
+public Optional<Asset> findActiveImageById(String id) {
+    return searchRepo.findActiveImageById(id);
+}
 }

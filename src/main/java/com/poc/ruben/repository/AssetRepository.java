@@ -1,7 +1,7 @@
 package com.poc.ruben.repository;
 
 import com.poc.ruben.domain.model.Asset;
-
+import java.util.Optional;
 import java.util.List;
 
 public interface AssetRepository {
@@ -22,4 +22,9 @@ public interface AssetRepository {
             List<Asset> items,
             long totalCount
     ) {}
+    Optional<Asset> findActiveImageById(String id);
 }
+
+
+
+

@@ -1,4 +1,4 @@
-package com.poc.ruben.config;
+package com.poc.ruben.config.properties;
 
 import com.poc.ruben.config.properties.StorageProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

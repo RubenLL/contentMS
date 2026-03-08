@@ -23,4 +23,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGeneric(Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("Unexpected error"));
     }
+
+    @ExceptionHandler(com.poc.ruben.domain.exception.NotFoundException.class)
+    public ResponseEntity<com.poc.ruben.dto.common.ErrorResponse> handleNotFound(
+            com.poc.ruben.domain.exception.NotFoundException e
+    ) {
+        return ResponseEntity.status(404).body(new com.poc.ruben.dto.common.ErrorResponse(e.getMessage()));
+    }
+
 }

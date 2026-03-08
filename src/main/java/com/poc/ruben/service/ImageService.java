@@ -1,5 +1,6 @@
 package com.poc.ruben.service;
 
+import com.poc.ruben.dto.image.ImageDetail;
 import com.poc.ruben.dto.image.ImageListItem;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface ImageService {
 
     record UploadResult(String id, String publicUrl) {}
     record SearchResult(List<ImageListItem> items, long totalCount) {}
+    ImageDetail getById(String id);
 }

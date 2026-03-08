@@ -9,8 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.List;
 
 @Repository
@@ -78,4 +78,18 @@ public class AssetSearchMongoRepository {
             return ".*" + escaped + ".*";
         }
     }
+
+    public Optional<Asset> findActiveImageById(String id) {
+    Criteria criteria = new Criteria().andOperator(
+            Criteria.where("_id").is(id),
+            Criteria.where("contentType").is(AssetContentType.IMAGE),
+            Criteria.where("deleted").is(false),
+            Criteria.where("expirationDate").gt(LocalDate.now())
+    );
+
+    Query q = new Query(criteria);
+    AssetDocument doc = mongoTemplate.findOne(q, AssetDocument.class);
+    if (doc == null) return Optional.empty();
+    return Optional.of(AssetMapper.toDomain(doc));
+}
 }

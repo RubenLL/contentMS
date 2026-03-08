@@ -9,9 +9,9 @@ import com.poc.ruben.repository.AssetRepository;
 import com.poc.ruben.repository.storage.StorageRepository;
 import com.poc.ruben.repository.storage.local.LocalKeyFactory;
 import com.poc.ruben.service.ImageService;
+import com.poc.ruben.domain.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -100,5 +100,14 @@ public SearchResult search(int page, int pageSize, String name, String desc, Lis
 
     var items = result.items().stream().map(com.poc.ruben.mapper.ImageMapper::toListItem).toList();
     return new SearchResult(items, result.totalCount());
+}
+@Override
+public com.poc.ruben.dto.image.ImageDetail getById(String id) {
+    if (id == null || id.isBlank()) throw new com.poc.ruben.domain.exception.ValidationException("id is required");
+
+    var asset = assetRepository.findActiveImageById(id)
+            .orElseThrow(() -> new NotFoundException("Image not found"));
+
+    return com.poc.ruben.mapper.ImageMapper.toDetail(asset);
 }
 }

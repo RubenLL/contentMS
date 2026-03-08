@@ -56,4 +56,10 @@ public class ImageController {
                 .distinct()
                 .toList();
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<com.poc.ruben.dto.image.GetImageByIdResponse> getById(@PathVariable String id) {
+        var detail = imageService.getById(id);
+        return ResponseEntity.ok(new com.poc.ruben.dto.image.GetImageByIdResponse("OK", detail));
+    }
+
 }
