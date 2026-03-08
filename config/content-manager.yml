@@ -1,0 +1,4 @@
+app:
+  storage:
+    rootDir: ./data-storage
+    publicBaseUrl: http://localhost:8080/files
