@@ -92,4 +92,18 @@ public class AssetSearchMongoRepository {
     if (doc == null) return Optional.empty();
     return Optional.of(AssetMapper.toDomain(doc));
 }
+
+
+public Optional<Asset> findNotDeletedImageById(String id) {
+    Criteria criteria = new Criteria().andOperator(
+            Criteria.where("_id").is(id),
+            Criteria.where("contentType").is(AssetContentType.IMAGE),
+            Criteria.where("deleted").is(false)
+    );
+
+    Query q = new Query(criteria);
+    AssetDocument doc = mongoTemplate.findOne(q, AssetDocument.class);
+    if (doc == null) return Optional.empty();
+    return Optional.of(AssetMapper.toDomain(doc));
+}
 }

@@ -33,4 +33,9 @@ public class AssetRepositoryMongoImpl implements AssetRepository {
 public Optional<Asset> findActiveImageById(String id) {
     return searchRepo.findActiveImageById(id);
 }
+
+@Override
+public java.util.Optional<com.poc.ruben.domain.model.Asset> findNotDeletedImageById(String id) {
+    return searchRepo.findNotDeletedImageById(id);
+}
 }

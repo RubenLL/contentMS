@@ -14,4 +14,5 @@ public interface ImageService {
     record UploadResult(String id, String publicUrl) {}
     record SearchResult(List<ImageListItem> items, long totalCount) {}
     ImageDetail getById(String id);
+    void delete(String userId, String id);
 }

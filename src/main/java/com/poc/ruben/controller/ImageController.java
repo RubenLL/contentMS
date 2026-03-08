@@ -62,4 +62,14 @@ public class ImageController {
         return ResponseEntity.ok(new com.poc.ruben.dto.image.GetImageByIdResponse("OK", detail));
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @RequestHeader("X-User-Id") String userId,
+            @PathVariable String id
+    ) {
+        imageService.delete(userId, id);
+        return ResponseEntity.noContent().build();
+    }   
+
 }

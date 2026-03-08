@@ -3,6 +3,8 @@ package com.poc.ruben.repository;
 import com.poc.ruben.domain.model.Asset;
 import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
+
 
 public interface AssetRepository {
     Asset save(Asset asset);
@@ -23,6 +25,8 @@ public interface AssetRepository {
             long totalCount
     ) {}
     Optional<Asset> findActiveImageById(String id);
+
+    Optional<Asset> findNotDeletedImageById(String id);
 }
 
 

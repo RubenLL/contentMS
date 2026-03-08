@@ -110,4 +110,55 @@ public com.poc.ruben.dto.image.ImageDetail getById(String id) {
 
     return com.poc.ruben.mapper.ImageMapper.toDetail(asset);
 }
+
+@Override
+public void delete(String userId, String id) {
+    if (userId == null || userId.isBlank()) {
+        throw new com.poc.ruben.domain.exception.ValidationException("X-User-Id is required");
+    }
+    if (id == null || id.isBlank()) {
+        throw new com.poc.ruben.domain.exception.ValidationException("id is required");
+    }
+
+    var asset = assetRepository.findNotDeletedImageById(id)
+            .orElseThrow(() -> new com.poc.ruben.domain.exception.NotFoundException("Image not found"));
+
+    // Derive storage key from public URL
+    String key = extractKeyFromPublicUrl(asset.getS3Url());
+
+    // Mark as deleted in DB (logical delete)
+    var now = java.time.Instant.now();
+    var audit = asset.getAudit();
+
+    var newAudit = new com.poc.ruben.domain.model.Audit(
+            audit.createdBy(),
+            audit.createdAt(),
+            userId,
+            now,
+            true,
+            userId,
+            now
+    );
+
+    asset.setAudit(newAudit);
+
+    assetRepository.save(asset);
+
+    // Tag the file in storage (local .meta sidecar)
+    storageRepository.tag(key, java.util.Map.of("deleted", "true"));
+}
+
+private String extractKeyFromPublicUrl(String publicUrl) {
+    if (publicUrl == null || publicUrl.isBlank()) {
+        throw new com.poc.ruben.domain.exception.StorageException("Asset public URL is missing");
+    }
+
+    // Expecting something like: http://localhost:8080/files/<key>
+    int idx = publicUrl.indexOf("/files/");
+    if (idx < 0) {
+        throw new com.poc.ruben.domain.exception.StorageException("Invalid public URL format: " + publicUrl);
+    }
+
+    return publicUrl.substring(idx + "/files/".length());
+}
 }
